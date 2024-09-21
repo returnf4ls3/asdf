@@ -6,7 +6,7 @@
 
 #define BASEPOS_X 0
 #define BASEPOS_Y 0
-#define TEXT_SPEED 0.001
+#define TEXT_SPEED 0.0001
 
 void gotoxy(int x, int y) {
 	COORD pos = { x-1+BASEPOS_X, y-1+BASEPOS_Y };
@@ -45,6 +45,47 @@ int userSelection(char sentence1[], char sentence2[]) {
         return 0;
     }
 } 
+
+void drawCup(int centerX, int centerY) {
+	int p = 0;
+	for (int i = 0; i < 3; i++) {
+		gotoxy(5+centerX+p, 1+centerY);
+		printf("___");
+		gotoxy(4+centerX+p, 2+centerY);
+		printf("/");
+		gotoxy(8+centerX+p, 2+centerY);
+		printf("\\");
+		gotoxy(3+centerX+p, 3+centerY);
+		printf("/");
+		gotoxy(9+centerX+p, 3+centerY);
+		printf("\\");
+		gotoxy(2+centerX+p, 4+centerY);
+		printf("/");
+		gotoxy(10+centerX+p, 4+centerY);
+		printf("\\");
+		p += 11;
+	}
+	
+	gotoxy(1+centerX, 5+centerY);
+	printf("_________________________________");
+}
+
+// return value is 0(false) or 1(true)
+int cup() {
+	int selected = 0;
+	int ans = rand() % 3 + 1;
+	
+	drawCup(0, 0);
+	
+	printf("정답: ");
+	scanf("%d", &selected);
+	
+	if (selected == ans) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
 
 int main() {
 	char name[20];
@@ -140,6 +181,88 @@ int main() {
 	Sleep(1000);
 	animateText("크고 안락하지만 음습해보이는.. 집을 더 탐색 해보자.");
 	Sleep(1000);
+	
+	void printRooms() {
+		printf("\n\n");
+		animateText("1. 문");
+		Sleep(500);
+		animateText("2. 편지가 놓여있는 원형 탁자");
+		Sleep(500);
+		animateText("3. 전화기");
+		Sleep(500);
+	}
+	
+	void printLetters() {
+		printf("\n\n");
+		animateText("1) 붉은색 소인이 찍혀있는 편지");
+		Sleep(1000);
+		animateText("2) 몇번 썼는지 많이 닳아 있는 크레파스");
+		Sleep(1000);
+		animateText("3) 레트로 게임기");
+		Sleep(1000);
+		animateText("0) 뒤로가기");
+		
+	}
+	
+	void back() {
+		int selection;
+
+		animateText("뒤로가려면 0을 입력 ");
+		while (1) {
+			scanf("%d", &selection);
+			if (selection == 0) break;
+		}
+	}
+	
+	while (1) {
+		int selection;
+		
+		printRooms();
+		
+		printf("\n\n");
+		printf("어디로 갈까? ");
+		scanf("%d", &selection);
+		
+		if (selection == 1) {
+			animateText("문이 밖에서 잠겼는지 철컹 소리와 함께 열리지 않는다.");
+			back();
+		} else if (selection == 2) {
+			while (1) {
+				int sel_table;
+				
+				printLetters();
+								
+				scanf("%d", &sel_table);
+				
+				if (sel_table == 1) {
+					printf("\n\n");
+					animateText("(편지)");
+					Sleep(500);
+					animateText("글씨가 번져 잘 보이지 않지만 유추해보니 4583라는 숫자가 보인다.");
+					Sleep(500);
+					animateText("그리고 시가 보인다.");
+					Sleep(1500);
+					animateText("<시>");
+					Sleep(500);
+					
+				} else if (sel_table == 2) {
+					
+				} else if (sel_table == 3) {
+					
+				} else if (sel_table == 0) {
+					break;
+				} else {
+        			printf("다시 입력해주세요.\n");
+				}
+				
+				
+				back();
+			}
+		} else if (selection == 3) {
+			animateText("구식전화기다. 전화를 걸 수 있는 상태인 거 같다. ");
+			back();	
+		}
+	}
 	
 	return 0;
 }
