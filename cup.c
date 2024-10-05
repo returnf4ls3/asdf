@@ -89,17 +89,82 @@ void drawCups(int centerX, int centerY, int sel, int answer) {
 	printf("_________________________________\n\n");
 }
 
+void drawCupsAtCenter(int sel, int answer) {
+	int centerX = 33;
+	int centerY = 15;
+	
+	int p = 0;
+
+	system("cls");
+	
+	if (sel != 0) {
+		if (sel == 1) {
+			p = 0;
+			if (sel == answer) {
+				drawCup(centerX+p, centerY-1);
+				gotoxy(6+centerX+p, 4+centerY);
+				printf("■");
+			} else {
+				drawCup(centerX+p, centerY-1);
+			}
+			p += 11;
+			drawCup(centerX+p, centerY);
+			p += 11;
+			drawCup(centerX+p, centerY);
+			
+			return;
+		} else if (sel == 2) {
+			p = 0;
+			drawCup(centerX+p, centerY);
+			p += 11;
+			if (sel == answer) {
+				drawCup(centerX+p, centerY-1);
+				gotoxy(6+centerX+p, 4+centerY);
+				printf("■");
+			} else {
+				drawCup(centerX+p, centerY-1);
+			}
+			p += 11;
+			drawCup(centerX+p, centerY);
+			
+			return;
+		} else if (sel == 3) {
+			p = 0;
+			drawCup(centerX+p, centerY);
+			p += 11;
+			drawCup(centerX+p, centerY);
+			p += 11;
+			if (sel == answer) {
+				drawCup(centerX+p, centerY-1);
+				gotoxy(6+centerX+p, 4+centerY);
+				printf("■");
+			} else {
+				drawCup(centerX+p, centerY-1);
+			}
+			
+			return;
+		}
+	}
+
+	for (int i = 0; i < 3; i++) {
+		drawCup(centerX+p, centerY);
+		p += 11;
+	}
+	
+	printf("\n");
+}
+
 // return value is 0 or 1
 int cup() {
 	int selected = 0;
 	int ans = rand() % 3 + 1;
 	
-	drawCups(0, 1, 0, 0);
+	drawCupsAtCenter(0, 0);
 	
 	printf("정답: ");
 	scanf("%d", &selected);
 	
-	drawCups(0, 1, selected, ans);
+	drawCupsAtCenter(selected, ans);
 		
 	if (selected == ans) {
 		return 1;
