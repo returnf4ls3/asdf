@@ -10,18 +10,88 @@
 int BASEPOS_X = 0;
 int BASEPOS_Y = 0;
 
-
 void gotoxy(int x, int y) {
 	COORD pos = { x-1+BASEPOS_X, y-1+BASEPOS_Y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void gotoCenter(int x, int y, char text[]) {
-	BASEPOS_X = (int)((strlen(text)) / 2);
-	COORD pos = { x-1+BASEPOS_X, y-1+BASEPOS_Y };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+void getConsoleSize(int *width, int *height) {
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    *width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    *height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
- 
+
+void calculateTextSize(char text[], int *maxWidth, int *lineCount) {
+    int currentWidth = 0;
+    *maxWidth = 0;
+    *lineCount = 1;
+    
+    for (int i = 0; text[i] != '\0'; i++) {
+        if (text[i] == '\n') {
+            (*lineCount)++;
+            if (currentWidth > *maxWidth) {
+                *maxWidth = currentWidth;
+            }
+            currentWidth = 0;
+        } else {
+            currentWidth++;
+        }
+    }
+    
+    if (currentWidth > *maxWidth) {
+        *maxWidth = currentWidth;
+    }
+}
+
+void gotoCenter(char text[]) {
+    int consoleWidth, consoleHeight;
+    getConsoleSize(&consoleWidth, &consoleHeight);
+
+    int maxWidth, lineCount;
+    calculateTextSize(text, &maxWidth, &lineCount);  // 텍스트의 최대 너비와 라인 수 계산
+
+    // 콘솔 중앙 위치 계산
+    int startX = (consoleWidth - maxWidth) / 2;
+    int startY = (consoleHeight - lineCount) / 2;
+
+    // 텍스트를 출력하기 위해 커서 위치를 이동시키며 출력
+    int currentX = startX;
+    int currentY = startY;
+
+    COORD pos;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    for (int i = 0; text[i] != '\0'; i++) {
+        if (text[i] == '\n') {
+            currentY++;  // 줄바꿈이 발생하면 세로 위치를 한 줄 내림
+            currentX = startX;  // 가로 위치는 처음 중앙으로 초기화
+        } else {
+            pos.X = currentX;
+            pos.Y = currentY;
+            SetConsoleCursorPosition(hConsole, pos);  // 커서 이동
+            char slice[2];
+            strncpy(slice, &text[i], 1);  // 한 글자만 추출
+            slice[1] = '\0';
+            printf("%s", slice);  // 한 글자씩 출력
+            Sleep((int)(TEXT_SPEED * 1000));  // 텍스트 속도에 맞춰 딜레이 적용
+            currentX++;  // 다음 문자는 오른쪽으로 이동
+        }
+    }
+}
+
+void printExitMessage() {
+    int consoleWidth, consoleHeight;
+    getConsoleSize(&consoleWidth, &consoleHeight);
+
+    COORD pos;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    
+    pos.X = 0;
+    pos.Y = consoleHeight - 1;
+    SetConsoleCursorPosition(hConsole, pos);
+}
+
 void animateText(char text[]) {
 	int len = strlen(text);
 	
@@ -30,11 +100,11 @@ void animateText(char text[]) {
 		strncpy(slice, &text[i], 1);
 		slice[1] = '\0';
 		
-		//gotoCenter(i, 0, text);
+		gotoCenter(text);
 		printf("%s", slice);
 		Sleep((int)(TEXT_SPEED * 1000));
 	}
-	//BASEPOS_Y++;
+	printExitMessage();
 	printf("\n\n");
 }
 
