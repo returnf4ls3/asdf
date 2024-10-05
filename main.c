@@ -5,7 +5,7 @@
 #include <time.h>
 #include <conio.h>
 
-#define TEXT_SPEED 0.01 // edit it
+#define TEXT_SPEED 0.0000001 // edit it
 
 int BASEPOS_X = 0;
 int BASEPOS_Y = 0;
@@ -94,8 +94,6 @@ void gotoCenter(char text[]) {
             currentX++;  // 다음 문자는 오른쪽으로 이동
         }
     }
-    
-    printf("\n\n");
 }
 
 // 콘솔의 마지막 줄에 메시지를 출력하는 함수
@@ -318,6 +316,8 @@ int main() {
 	
 	srand(time(NULL));
 	
+	system("mode con:cols=100 lines=25");
+	
 	printf("내 이름은 ");
 	scanf("%s", name);
 	printf("\n");
@@ -467,6 +467,13 @@ int main() {
 				Sleep(1000);
 				sprintf(buffer, "%s: ..이게 뭐지?");
 				animateText(buffer);
+				canOpenDoor = 2;
+			} else if (canOpenDoor == 2) {
+				animateText("문을 열었다.");
+				Sleep(1000);
+				animateText("앞에 상자와 그 안에 쪽지가 보인다.");
+				Sleep(1000);
+				animateText("쪽지엔 곰 고양이 금붕어 강아지 원숭이라고 쓰여있다.");
 			} else {
 				animateText("문이 밖에서 잠겼는지 철컹 소리와 함께 열리지 않는다.");
 				back();
@@ -509,25 +516,43 @@ int main() {
 					Sleep(500);
 					animateText("하얀염소가 9등이다.");
 				} else if (sel_table == 2) {
-					
+					animateText("하양, 빨강, 노랑, 파랑색의 크레파스들이 가지런히 놓여 있다.");
+					Sleep(1000);
+					animateText("길이 순서대로 본다면 빨강,파랑, 하양, 노랑순으로 길다.");
+					Sleep(1000);
 				} else if (sel_table == 3) {
 					animateText("어렸을때 많이 해본 게임이다.");
 					Sleep(500);
+					int skip = 0;
 					while (1) {
-						selected = userSelection("1. 게임을 한다.", "2. 무시 한다.");
-						
+						int selected;
+						if (skip == 0) selected = userSelection("1. 게임을 한다.", "2. 무시 한다.");				
+							
 						if (selected == 1) {
 							int result = cup();	// 1, 0
 							
 							if (result == 1) {
+								printf("\n\n");	
 								animateText("<문 앞으로 나가 보시오.>");
 								Sleep(1000);
-								animateText("“응 문? 문은 잠겼는데?”");
+								sprintf(buffer, "%s: 응 문? 문은 잠겼는데?", name);
+								animateText(buffer);
 								Sleep(1000);
 								canOpenDoor = 1;
 								break;
 							} else {
-								
+								while (1) {
+									int	selected2 = userSelection("1. 다시 한다.", "2. 무시 한다.");
+									
+									skip = 1;
+									if (selected2 == 1) {
+										selected = 1;
+										break;
+									} else {
+										selected = 2;
+										break;
+									}
+								}
 							}
 						} else if (selected == 2) {
 							break;
@@ -542,7 +567,23 @@ int main() {
 				back();
 			}
 		} else if (selection == 3) {
-			animateText("구식전화기다. 전화를 걸 수 있는 상태인 거 같다. ");
+			animateText("구식전화기다. 전화를 걸 수 있는 상태인 거 같다.");
+			while (1) {
+				int selected = userSelection("1. 전화번호를 입력한다.", "2. 무시 한다.");
+				char text[100];
+			
+				if (selected == 1) {
+					while (1) {
+						printf("전화번호 입력: ");
+						scanf("%s", text);
+						if (strcmp(text, "4583-8194") == 0) {
+							
+						}
+					}
+				} else {
+					
+				}
+			}
 			back();	
 		}
 	}
