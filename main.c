@@ -476,6 +476,7 @@ int main() {
 				animateText("쪽지엔 곰 고양이 금붕어 강아지 원숭이라고 쓰여있다.");
 			} else {
 				animateText("문이 밖에서 잠겼는지 철컹 소리와 함께 열리지 않는다.");
+				Sleep(1000);
 				back();
 			}
 		} else if (selection == 2) {
@@ -579,11 +580,55 @@ int main() {
 						scanf("%s", text);
 						if (strcmp(text, "4583-8194") == 0) {
 							Sleep(1000);
-							animateText("\"..암호를 말하라\"");
 							printf("\n\n");
+							animateText("\"..암호를 말하라\"");
 							scanf("%s", pw);
+							printf("\n");
 							if (strcmp(pw, "53276") == 0) {
-								// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+								Sleep(2500);
+								animateText("정답이다.");
+								Sleep(1000);
+								animateText("띵! 메세지가 왔다.");
+								Sleep(1000);
+								animateText("<메세지> 'www.qkdxkfcnfwja.com'");
+								Sleep(1000);
+								sprintf(buffer, "%s: ...이게 뭐야?");
+								animateText(buffer);
+								Sleep(2500);
+								animateText("<메세지창> '신뢰할 수 없는 링크입니다. 그래도 이동하시겠습니까?'");
+								Sleep(1000);
+								sprintf(buffer, "%s: ...");
+								while (1) {
+									int selected = userSelection("1. 링크를 누른다.", "2. 링크를 누르지 않는다.");
+									
+									if (selected == 1) {
+										// awwwwwwwwwwww
+									} else {
+										Sleep(2500);
+										animateText("전화가 온다.\n4583-8194 라고 쓰여있다.");
+										Sleep(1000);
+										sprintf(buffer, "%s: 여보세요?", name);
+										animateText(buffer);
+										Sleep(1000);
+										animateText("\"..치지직..눌…라…치지직\"");
+										Sleep(1000);
+										sprintf(buffer, "%s: 뭐라고요? 누르라고요?", name);
+										animateText(buffer);
+										Sleep(1000);
+										animateText("띡-");
+										Sleep(1000);
+										animateText("전화가 끊겼다.");
+										Sleep(1000);
+										sprintf(buffer, "%s: 뭐야 자기 맘대로 끊고.. 짜증나게.. 그나저나 링크 누르라고..?", name);
+										animateText(buffer);
+										Sleep(1000);
+										animateText("<메세지창> '신뢰할 수 없는 링크입니다.  그래도 이동하시겠습니까?'");
+										Sleep(1000);
+										sprintf(buffer, "%s: ..예", name);
+										animateText(buffer);
+										Sleep(1000);
+									}
+								}
 							} else {
 								animateText("뚜- 뚜- 뚜- 뚜-");
 								Sleep(1000);
@@ -592,6 +637,7 @@ int main() {
 								sprintf(buffer, "%s: 뭐야..? 틀린건가? 다시 생각해보자.");
 								animateText(buffer);
 								Sleep(1000);
+								break;
 							}
 						} else {
 							printf("이 번호는 없는 번호입니다. 확인 후 다시 걸어주세요.");
