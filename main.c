@@ -94,13 +94,11 @@ int main() {
 	
 	srand(time(NULL));
 	
-	printf("이름 입력 ");
+	printf("내 이름은 ");
 	scanf("%s", name);
-	
-	system("cls");
-	
-	sprintf(buffer,"내 이름은 %s.\n반지하에 사는 길거리 어디에서나 볼 법한사람이다.", name);
-	animateText(buffer);
+	printf("\n");
+	Sleep(1000);
+	animateText("반지하에 사는 길거리 어디에서나 볼 법한사람이다.");
 	Sleep(1000);
 	animateText("피곤했던 오늘을 보내고 잠에 들려고 한다.");
 	Sleep(1000);
