@@ -6,6 +6,8 @@
 #include <conio.h>
 
 #define TEXT_SPEED 0.0000001 // edit it
+#define INIT_POS 1
+#define MAP_SIZE 4
 
 int BASEPOS_X = 0;
 int BASEPOS_Y = 0;
@@ -108,6 +110,163 @@ void printExitMessage() {
     pos.X = 0;
     pos.Y = consoleHeight - 1;
     SetConsoleCursorPosition(hConsole, pos);  // 마지막 줄로 커서 이동
+}
+
+// 2차원 배열로 이루어진 맵
+const int originMap[MAP_SIZE][MAP_SIZE] = {
+    {1, 6, 1, 8},
+    {6, 2, 5, 4},
+    {7, 2, 5, 4},
+    {8, 3, 3, 7}
+};
+
+// 포지션 구조체
+typedef struct {
+    int x;
+    int y;
+} Pos;
+
+// 게임 상태를 저장하는 구조체
+typedef struct {
+    char questionMap[MAP_SIZE][MAP_SIZE]; // 맞추고 있는 맵
+    Pos player;                             // 플레이어 커서 위치
+    Pos flipPos[2];                        // 뒤집은 카드 위치 저장
+    int flipCount;                         // 뒤집은 카드 개수
+    int spaceCount;                        // 뒤집은 횟수
+    int matchedCardCount;                  // 맞춘 카드 개수
+} GameManager;
+
+// 콘솔 내부의 특정 위치로 커서를 이동하는 함수
+void GotoXY(int x, int y) {
+    COORD pos;
+    pos.X = 2 * x;
+    pos.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
+// 콘솔 창 크기와 제목을 관리하는 함수
+void SetConsoleView() {
+    system("mode con:cols=65 lines=10");
+}
+
+
+// 키보드 입력 감지 및 입력된 키보드를 반환하는 함수
+int GetKeyDown() {
+    if (_kbhit() != 0) {
+        return _getch();
+    }
+    return 0;
+}
+
+// 카드 뒤집는 함수
+void FlipCard(GameManager *game) {
+    if (game->questionMap[game->player.y][game->player.x] != '?') return;
+    if (game->flipCount > 1) return; // 2장만 뒤집을 수 있음
+    game->flipPos[game->flipCount].x = game->player.x;
+    game->flipPos[game->flipCount].y = game->player.y;
+    game->questionMap[game->player.y][game->player.x] = originMap[game->player.y][game->player.x] + '0';
+    ++game->flipCount;
+}
+
+void Init(GameManager *game) {
+    for (int y = 0; y < MAP_SIZE; ++y) {
+        for (int x = 0; x < MAP_SIZE; ++x) {
+            game->questionMap[y][x] = '?'; // 물음표로 다 세팅
+        }
+    }
+    game->player.x = 0;
+    game->player.y = 0;
+    game->flipCount = 0;
+    game->spaceCount = 0;
+    game->matchedCardCount = 0;
+}
+
+
+// 커서의 위치 이동
+void MovePos(GameManager *game) {
+    GotoXY(INIT_POS + (game->player.x * 3), INIT_POS + (game->player.y * 2) + 1);
+    printf("  "); // 이전 위치 지우기
+
+    // 키보드 입력을 받아서, 해당 위치로 이동
+    int key = _getch();
+    switch (key) {
+        case 75: // LEFT
+            if (game->player.x > 0) --game->player.x;
+            break;
+        case 77: // RIGHT
+            if (game->player.x < MAP_SIZE - 1) ++game->player.x;
+            break;
+        case 72: // UP
+            if (game->player.y > 0) --game->player.y;
+            break;
+        case 80: // DOWN
+            if (game->player.y < MAP_SIZE - 1) ++game->player.y;
+            break;
+    }
+}
+
+// 화면에 그리기
+void DrawMain(GameManager *game) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // WHITE
+    char c;
+    for (int y = 0; y < MAP_SIZE; ++y) {
+        GotoXY(INIT_POS, INIT_POS + (2 * y));
+        for (int x = 0; x < MAP_SIZE; ++x) {
+            c = game->questionMap[y][x];
+            if (c != '?') {
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10); // GREEN
+            }
+            printf("[%c]   ", c);
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // WHITE
+        }
+    }
+
+    // 플레이어 그리기
+    GotoXY(INIT_POS + (game->player.x * 3), INIT_POS + (game->player.y * 2) + 1);
+    printf(" ^");
+
+    GotoXY(14, 1);
+    printf("Count : %d", game->spaceCount);
+}
+
+// 게임 클리어 메시지 출력
+void DrawGameClear() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14); // YELLOW
+    GotoXY(10, 3);
+    printf("=========================");
+    GotoXY(10, 4);
+    printf("======= C L E A R =======");
+    GotoXY(10, 5);
+    printf("=========================");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // WHITE
+}
+
+
+// 카드 확인 함수
+int CheckCard(GameManager *game) {
+    if (game->flipCount == 2) {
+        char c = '?';
+        if (originMap[game->flipPos[0].y][game->flipPos[0].x] == originMap[game->flipPos[1].y][game->flipPos[1].x]) {
+            c = originMap[game->flipPos[0].y][game->flipPos[0].x] + '0';
+            ++game->matchedCardCount;
+        } else {
+            Sleep(500);
+        }
+        game->questionMap[game->flipPos[0].y][game->flipPos[0].x] = c;
+        game->questionMap[game->flipPos[1].y][game->flipPos[1].x] = c;
+        game->flipCount = 0;
+        ++game->spaceCount;
+
+        if (game->matchedCardCount >= 8) {
+            // 게임 클리어
+            DrawGameClear();
+            Sleep(2000);
+            system("cls");
+            return 1;
+        }
+        
+        return 0;
+    }
 }
 
 /*void animateText(char text[]) {
@@ -592,7 +751,7 @@ int main() {
 								Sleep(1000);
 								animateText("<메세지> 'www.qkdxkfcnfwja.com'");
 								Sleep(1000);
-								sprintf(buffer, "%s: ...이게 뭐야?");
+								sprintf(buffer, "%s: ...이게 뭐야?", name);
 								animateText(buffer);
 								Sleep(2500);
 								animateText("<메세지창> '신뢰할 수 없는 링크입니다. 그래도 이동하시겠습니까?'");
@@ -610,7 +769,7 @@ int main() {
 										sprintf(buffer, "%s: 여보세요?", name);
 										animateText(buffer);
 										Sleep(1000);
-										animateText("\"..치지직..눌…라…치지직\"");
+										animateText("\"..치지직..눌...라...치지직\"");
 										Sleep(1000);
 										sprintf(buffer, "%s: 뭐라고요? 누르라고요?", name);
 										animateText(buffer);
@@ -627,6 +786,38 @@ int main() {
 										sprintf(buffer, "%s: ..예", name);
 										animateText(buffer);
 										Sleep(1000);
+										sprintf(buffer, "%s: ..이게 뭐지??? 같은 숫자 카드 찾기 게임?", name);
+										animateText(buffer);
+										Sleep(2500);
+										animateText("조작법\n\n방향키: 움직이기\n스페이스: 뒤집기");
+										Sleep(1000);
+										getch();
+										
+										SetConsoleView();
+									    GameManager game;
+									    Init(&game);
+									    
+									    while (1) {
+									    	int key = GetKeyDown();
+									    	
+									    	if (key == 224) {
+									    		MovePos(&game);
+											}
+											
+											if (key == 32) {
+												FlipCard(&game);
+											}
+											
+											DrawMain(&game);
+											Sleep(100);
+											
+											int result = CheckCard(&game);
+											
+											if (result == 1) break;
+										}
+										system("mode con:cols=100 lines=25");
+									    
+										break;
 									}
 								}
 							} else {
