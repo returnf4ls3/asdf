@@ -318,7 +318,7 @@ int main() {
 	
 	system("mode con:cols=100 lines=25");
 	
-	printf("내 이름은 ");
+	printf("(이름을 작성해주세요) ");
 	scanf("%s", name);
 	printf("\n");
 	Sleep(1000);
@@ -577,7 +577,10 @@ int main() {
 						printf("전화번호 입력: ");
 						scanf("%s", text);
 						if (strcmp(text, "4583-8194") == 0) {
-							
+							Sleep(1000);
+						} else {
+							printf("이 번호는 없는 번호입니다. 확인 후 다시 걸어주세요.");
+							break;
 						}
 					}
 				} else {
