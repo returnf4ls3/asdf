@@ -5,7 +5,7 @@
 #include <time.h>
 #include <conio.h>
 
-#define TEXT_SPEED 0.0000001 // edit it
+#define TEXT_SPEED 0.05// edit it
 #define INIT_POS 1
 #define MAP_SIZE 4
 
@@ -141,6 +141,18 @@ void DrawMain(GameManager *game) {
     printf("Count : %d", game->spaceCount);
 }
 
+// 게임 클리어 메시지 출력
+void DrawGameClear() {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14); // YELLOW
+    GotoX_Card(10, 3);
+    printf("=========================");
+    GotoX_Card(10, 4);
+    printf("======= C L E A R =======");
+    GotoX_Card(10, 5);
+    printf("=========================");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // WHITE
+}
+
 // 카드 확인 함수
 int CheckCard(GameManager *game) {
     if (game->flipCount == 2) {
@@ -166,18 +178,6 @@ int CheckCard(GameManager *game) {
     }
     
     return 0;
-}
-
-// 게임 클리어 메시지 출력
-void DrawGameClear() {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14); // YELLOW
-    GotoX_Card(10, 3);
-    printf("=========================");
-    GotoX_Card(10, 4);
-    printf("======= C L E A R =======");
-    GotoX_Card(10, 5);
-    printf("=========================");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); // WHITE
 }
 
 // 텍스트에서 가장 긴 줄의 길이와 총 라인 수를 계산하는 함수
@@ -760,7 +760,7 @@ int main() {
 								Sleep(2500);
 								animateText("<메세지창> '신뢰할 수 없는 링크입니다. 그래도 이동하시겠습니까?'");
 								Sleep(1000);
-								sprintf(buffer, "%s: ...");
+								sprintf(buffer, "%s: ...", name);
 								while (1) {
 									int selected = userSelection("1. 링크를 누른다.", "2. 링크를 누르지 않는다.");
 									
@@ -800,7 +800,7 @@ int main() {
 								Sleep(1000);
 								animateText("전화가 끊겼다.");
 								Sleep(1000);
-								sprintf(buffer, "%s: 뭐야..? 틀린건가? 다시 생각해보자.");
+								sprintf(buffer, "%s: 뭐야..? 틀린건가? 다시 생각해보자.", name);
 								animateText(buffer);
 								Sleep(1000);
 								break;
