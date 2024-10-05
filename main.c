@@ -571,6 +571,7 @@ int main() {
 			while (1) {
 				int selected = userSelection("1. 전화번호를 입력한다.", "2. 무시 한다.");
 				char text[100];
+				char pw[100];
 			
 				if (selected == 1) {
 					while (1) {
@@ -578,6 +579,20 @@ int main() {
 						scanf("%s", text);
 						if (strcmp(text, "4583-8194") == 0) {
 							Sleep(1000);
+							animateText("\"..암호를 말하라\"");
+							printf("\n\n");
+							scanf("%s", pw);
+							if (strcmp(pw, "53276") == 0) {
+								// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+							} else {
+								animateText("뚜- 뚜- 뚜- 뚜-");
+								Sleep(1000);
+								animateText("전화가 끊겼다.");
+								Sleep(1000);
+								sprintf(buffer, "%s: 뭐야..? 틀린건가? 다시 생각해보자.");
+								animateText(buffer);
+								Sleep(1000);
+							}
 						} else {
 							printf("이 번호는 없는 번호입니다. 확인 후 다시 걸어주세요.");
 							break;
