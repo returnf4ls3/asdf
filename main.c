@@ -337,7 +337,7 @@ int main() {
 	Sleep(1000);
 	animateText("이상한 굉음과 함께 집이 크게 흔들린다.");
 	Sleep(1000);
-	animateText("커튼이 젖혀져 밝은 빛이 감고 내 눈에도 선명히 보이는 듯 하다.");
+	animateText("커튼이 젖혀져 밝은 빛이 눈을 감고 있는 내게도 선명히 보이는 듯 하다.");
 	Sleep(1000);
 	
 	while (1) {	
