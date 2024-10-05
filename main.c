@@ -5,7 +5,7 @@
 #include <time.h>
 #include <conio.h>
 
-#define TEXT_SPEED 0.000001 // edit it
+#define TEXT_SPEED 0.01 // edit it
 
 int BASEPOS_X = 0;
 int BASEPOS_Y = 0;
@@ -22,31 +22,47 @@ void getConsoleSize(int *width, int *height) {
     *height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
+// 텍스트에서 가장 긴 줄의 길이와 총 라인 수를 계산하는 함수
 void calculateTextSize(char text[], int *maxWidth, int *lineCount) {
     int currentWidth = 0;
     *maxWidth = 0;
-    *lineCount = 1;
+    *lineCount = 1;  // 기본적으로 한 줄은 있다고 가정
     
     for (int i = 0; text[i] != '\0'; i++) {
         if (text[i] == '\n') {
-            (*lineCount)++;
+            (*lineCount)++;  // 줄바꿈이 있을 때마다 라인 수 증가
             if (currentWidth > *maxWidth) {
-                *maxWidth = currentWidth;
+                *maxWidth = currentWidth;  // 가장 긴 줄의 길이를 저장
             }
-            currentWidth = 0;
+            currentWidth = 0;  // 새로운 줄의 길이를 계산하기 위해 초기화
         } else {
             currentWidth++;
         }
     }
     
+    // 마지막 줄도 확인
     if (currentWidth > *maxWidth) {
         *maxWidth = currentWidth;
     }
 }
 
+// 한 글자씩 애니메이션처럼 출력하는 함수
+void animateText(char text[]) {
+    int len = strlen(text);
+    for (int i = 0; i < len; i++) {
+        char slice[2];
+        strncpy(slice, &text[i], 1);
+        slice[1] = '\0';  // 문자열 끝에 null 추가
+        printf("%s", slice);  // 한 글자씩 출력
+        Sleep((int)(TEXT_SPEED * 1000));  // 딜레이 추가
+    }
+    printf("\n\n");  // 각 텍스트 후 줄바꿈
+}
+
+// 콘솔 창의 중앙에 텍스트를 출력하는 함수
 void gotoCenter(char text[]) {
     int consoleWidth, consoleHeight;
-    getConsoleSize(&consoleWidth, &consoleHeight);
+    getConsoleSize(&consoleWidth, &consoleHeight);  // 콘솔 크기를 가져옴
 
     int maxWidth, lineCount;
     calculateTextSize(text, &maxWidth, &lineCount);  // 텍스트의 최대 너비와 라인 수 계산
@@ -78,21 +94,25 @@ void gotoCenter(char text[]) {
             currentX++;  // 다음 문자는 오른쪽으로 이동
         }
     }
+    
+    printf("\n\n");
 }
 
+// 콘솔의 마지막 줄에 메시지를 출력하는 함수
 void printExitMessage() {
     int consoleWidth, consoleHeight;
-    getConsoleSize(&consoleWidth, &consoleHeight);
+    getConsoleSize(&consoleWidth, &consoleHeight);  // 콘솔 크기를 가져옴
 
     COORD pos;
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     
+    // 콘솔의 마지막 줄로 커서 이동
     pos.X = 0;
     pos.Y = consoleHeight - 1;
-    SetConsoleCursorPosition(hConsole, pos);
+    SetConsoleCursorPosition(hConsole, pos);  // 마지막 줄로 커서 이동
 }
 
-void animateText(char text[]) {
+/*void animateText(char text[]) {
 	int len = strlen(text);
 	
 	for (int i = 0; i < len; i++) {
@@ -106,7 +126,7 @@ void animateText(char text[]) {
 	}
 	printExitMessage();
 	printf("\n\n");
-}
+}*/
 
 int userSelection(char sentence1[], char sentence2[]) {
 	int selected = 0;
@@ -431,6 +451,7 @@ int main() {
 		
 		if (selection == 1) {
 			if (canOpenDoor == 1) {
+				system("cls");
 				animateText("문이 열린다.");
 				Sleep(1000);
 				sprintf(buffer, "%s: 응? 아까 분명히 잠겨 있었는데?");
