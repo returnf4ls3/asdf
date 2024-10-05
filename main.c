@@ -348,6 +348,8 @@ int main() {
 		system("cls");
 	}
 	
+	int canOpenDoor = 0;
+	
 	while (1) {
 		int selection;
 		
@@ -358,8 +360,26 @@ int main() {
 		scanf("%d", &selection);
 		
 		if (selection == 1) {
-			animateText("문이 밖에서 잠겼는지 철컹 소리와 함께 열리지 않는다.");
-			back();
+			if (canOpenDoor == 1) {
+				animateText("문이 열린다.");
+				Sleep(1000);
+				sprintf(buffer, "%s: 응? 아까 분명히 잠겨 있었는데?");
+				animateText(buffer);
+				Sleep(1000);
+				animateText("문 앞에 상자가 놓여있다.");
+				Sleep(1000);
+				animateText("상자안엔 쪽지가 놓여있다.");
+				Sleep(1000);
+				animateText("<쪽지>");
+				Sleep(500);
+				animateText("곰 고양이 금붕어 강아지 원숭이");
+				Sleep(1000);
+				sprintf(buffer, "%s: ..이게 뭐지?");
+				animateText(buffer);
+			} else {
+				animateText("문이 밖에서 잠겼는지 철컹 소리와 함께 열리지 않는다.");
+				back();
+			}
 		} else if (selection == 2) {
 			while (1) {
 				int sel_table;
@@ -380,7 +400,7 @@ int main() {
 					Sleep(500);
 					animateText("동물들이 달리기 시합을 한다.");
 					Sleep(500);
-					animateText("파란새는 1등,");
+					animateText("파랑새는 1등,");
 					Sleep(500);
 					animateText("주황 금붕어가 2등,");
 					Sleep(500);
@@ -400,7 +420,28 @@ int main() {
 				} else if (sel_table == 2) {
 					
 				} else if (sel_table == 3) {
-					
+					animateText("어렸을때 많이 해본 게임이다.");
+					Sleep(500);
+					while (1) {
+						selected = userSelection("1. 게임을 한다.", "2. 무시 한다.");
+						
+						if (selected == 1) {
+							int result = cup();	// 1, 0
+							
+							if (result == 1) {
+								animateText("<문 앞으로 나가 보시오.>");
+								Sleep(1000);
+								animateText("“응 문? 문은 잠겼는데?”");
+								Sleep(1000);
+								canOpenDoor = 1;
+								break;
+							} else {
+								
+							}
+						} else if (selected == 2) {
+							break;
+						}
+					}
 				} else if (sel_table == 0) {
 					break;
 				} else {
