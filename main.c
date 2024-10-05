@@ -3,16 +3,25 @@
 #include <windows.h>
 #include <string.h>
 #include <time.h>
+#include <conio.h>
 
-#define BASEPOS_X 0
-#define BASEPOS_Y 0
-#define TEXT_SPEED 0.0001
+#define TEXT_SPEED 0.000001 // edit it
+
+int BASEPOS_X = 0;
+int BASEPOS_Y = 0;
+
 
 void gotoxy(int x, int y) {
 	COORD pos = { x-1+BASEPOS_X, y-1+BASEPOS_Y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
+void gotoCenter(int x, int y, char text[]) {
+	BASEPOS_X = (int)((strlen(text)) / 2);
+	COORD pos = { x-1+BASEPOS_X, y-1+BASEPOS_Y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+ 
 void animateText(char text[]) {
 	int len = strlen(text);
 	
@@ -21,9 +30,11 @@ void animateText(char text[]) {
 		strncpy(slice, &text[i], 1);
 		slice[1] = '\0';
 		
+		//gotoCenter(i, 0, text);
 		printf("%s", slice);
 		Sleep((int)(TEXT_SPEED * 1000));
 	}
+	//BASEPOS_Y++;
 	printf("\n\n");
 }
 
@@ -333,6 +344,8 @@ int main() {
 			scanf("%d", &selection);
 			if (selection == 0) break;
 		}
+		
+		system("cls");
 	}
 	
 	while (1) {
@@ -365,7 +378,25 @@ int main() {
 					Sleep(1500);
 					animateText("<시>");
 					Sleep(500);
-					
+					animateText("동물들이 달리기 시합을 한다.");
+					Sleep(500);
+					animateText("파란새는 1등,");
+					Sleep(500);
+					animateText("주황 금붕어가 2등,");
+					Sleep(500);
+					animateText("보라 고양이가 3등,");
+					Sleep(500);
+					animateText("노란 너구리는 4등,");
+					Sleep(500);
+					animateText("검정 곰은 5등,");
+					Sleep(500);
+					animateText("갈색 원숭이는 6등,");
+					Sleep(500);
+					animateText("초록 강아지는 7등,");
+					Sleep(500);
+					animateText("빨간 돼지는 8등,");
+					Sleep(500);
+					animateText("하얀염소가 9등이다.");
 				} else if (sel_table == 2) {
 					
 				} else if (sel_table == 3) {
@@ -375,7 +406,6 @@ int main() {
 				} else {
         			printf("다시 입력해주세요.\n");
 				}
-				
 				
 				back();
 			}
