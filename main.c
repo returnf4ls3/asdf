@@ -26,12 +26,36 @@ void getConsoleSize(int *width, int *height) {
 }
 
 // 2차원 배열로 이루어진 맵
-const int originMap[MAP_SIZE][MAP_SIZE] = {
-    {1, 6, 1, 8},
-    {6, 2, 5, 4},
-    {7, 2, 5, 4},
-    {8, 3, 3, 7}
-};
+int originMap[MAP_SIZE][MAP_SIZE];
+
+void generateRandomMap() {
+    int numbers[16];
+    
+    // 1부터 8까지의 숫자를 2개씩 배열에 추가
+    for (int i = 0; i < 8; ++i) {
+        numbers[i * 2] = i + 1;
+        numbers[i * 2 + 1] = i + 1;
+    }
+    
+    // 랜덤 시드 설정
+    srand(time(NULL));
+
+    // 숫자 섞기 (피셔?예이츠 셔플 알고리즘)
+    for (int i = 15; i > 0; --i) {
+        int j = rand() % (i + 1);
+        // Swap numbers[i]와 numbers[j]
+        int temp = numbers[i];
+        numbers[i] = numbers[j];
+        numbers[j] = temp;
+    }
+    
+    // 2D 배열에 숫자 채우기
+    for (int i = 0; i < MAP_SIZE; ++i) {
+        for (int j = 0; j < MAP_SIZE; ++j) {
+            originMap[i][j] = numbers[i * MAP_SIZE + j];
+        }
+    }
+}
 
 // 포지션 구조체
 typedef struct {
@@ -956,6 +980,7 @@ int main() {
 	getch();
 	
 	SetConsoleView();
+    generateRandomMap();
     GameManager game;
     Init(&game);
     
