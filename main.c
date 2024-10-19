@@ -303,6 +303,11 @@ int userSelection(char sentence1[], char sentence2[]) {
     }
 } 
 
+/* 
+	야바위 게임 컵 그리는 함수
+	centerX, centerY를 지정해 컵을 원하는 위치에 그리기 가능
+	gotoxy 함수를 통해 커서위치를 변경함 
+*/ 
 void drawCup(int centerX, int centerY) {	
 	gotoxy(5+centerX, 1+centerY);
 	printf("___");
@@ -320,6 +325,9 @@ void drawCup(int centerX, int centerY) {
 	printf("\\");
 }
 
+/*
+	컵 3개를 drawCup 함수를 통해 그리고 
+*/
 void drawCups(int centerX, int centerY, int sel, int answer) {			
 	int p = 0;
 
@@ -448,7 +456,7 @@ void drawCupsAtCenter(int sel, int answer) {
 	printf("\n");
 }
 
-// return value is 0 or 1
+// return value is 0(false) or 1(true)
 int cup() {
 	int selected = 0;
 	int ans = rand() % 3 + 1;
@@ -467,6 +475,127 @@ int cup() {
 	}
 }
 
+void intro() {
+	// 방 
+	gotoxy(1, 1);
+	printf("■");
+	gotoxy(9, 1);
+	printf("■");
+	gotoxy(13, 1);
+	printf("■");
+	gotoxy(1, 2);
+	printf("■");
+	gotoxy(9, 2);
+	printf("■");
+	gotoxy(13, 2);
+	printf("■");
+	gotoxy(1, 3);
+	printf("■■■■");
+	gotoxy(9, 3);
+	printf("■");
+	gotoxy(13, 3);
+	printf("■■■");
+	gotoxy(1, 4);
+	printf("■");
+	gotoxy(9, 4);
+	printf("■");
+	gotoxy(13, 4);
+	printf("■");
+	gotoxy(1, 5);
+	printf("■■■■");
+	gotoxy(9, 5);
+	printf("■");
+	gotoxy(13, 5);
+	printf("■");
+	gotoxy(5, 7);
+	printf("■■■");
+	gotoxy(3, 8);
+	printf("■");
+	gotoxy(11, 8);
+	printf("■");
+	gotoxy(1, 9);
+	printf("■");
+	gotoxy(13, 9); 
+	printf("■");
+	gotoxy(1, 10);
+	printf("■");
+	gotoxy(13, 10);
+	printf("■");
+	gotoxy(3, 11);
+	printf("■");
+	gotoxy(11, 11);
+	printf("■");
+	gotoxy(5, 12);
+	printf("■■■");
+	Sleep(2500);
+	// 탈
+	BASEPOS_X = 20;
+	gotoxy(1, 1);
+	printf("■■■■■");
+	gotoxy(13, 1);
+	printf("■");
+	gotoxy(1, 2);
+	printf("■");
+	gotoxy(13, 2);
+	printf("■");
+	gotoxy(1, 3);
+	printf("■■■■■");
+	gotoxy(13, 3);
+	printf("■■■");
+	gotoxy(1, 4);
+	printf("■");
+	gotoxy(13, 4);
+	printf("■");
+	gotoxy(1, 5);
+	printf("■■■■■");
+	gotoxy(13, 5);
+	printf("■");
+	gotoxy(3, 7);
+	printf("■■■■■");
+	gotoxy(11, 8);
+	printf("■");
+	gotoxy(3, 9);
+	printf("■■■■■");
+	gotoxy(3, 10);
+	printf("■");
+	gotoxy(3, 11);
+	printf("■■■■■");
+	Sleep(2500);
+	// 출 
+	BASEPOS_X = 40;
+	gotoxy(7, 1);
+	printf("■");
+	gotoxy(1, 2);
+	printf("■■■■■■■");
+	gotoxy(5, 3);
+	printf("■");
+	gotoxy(9, 3);
+	printf("■");
+	gotoxy(3, 4);
+	printf("■");
+	gotoxy(11, 4);
+	printf("■");
+	gotoxy(3, 6);
+	printf("■■■■■");
+	gotoxy(7, 7);
+	printf("■");
+	gotoxy(7, 8);
+	printf("■");
+	gotoxy(3, 10);
+	printf("■■■■■");
+	gotoxy(11, 11);
+	printf("■");
+	gotoxy(3, 12);
+	printf("■■■■■");
+	gotoxy(3, 13);
+	printf("■");
+	gotoxy(3, 14);
+	printf("■■■■■");
+	BASEPOS_X = 0;
+	Sleep(2500);
+	system("cls");
+}
+
 int main() {
 	char name[20];
 	char buffer[200];
@@ -475,6 +604,8 @@ int main() {
 	srand(time(NULL));
 	
 	system("mode con:cols=100 lines=25");
+	
+	intro();
 	
 	printf("(이름을 작성해주세요) ");
 	scanf("%s", name);
