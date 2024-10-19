@@ -241,57 +241,6 @@ void animateText(char text[]) {
     printf("\n\n");  // 각 텍스트 후 줄바꿈
 }
 
-// 콘솔 창의 중앙에 텍스트를 출력하는 함수
-void gotoCenter(char text[]) {
-    int consoleWidth, consoleHeight;
-    getConsoleSize(&consoleWidth, &consoleHeight);  // 콘솔 크기를 가져옴
-
-    int maxWidth, lineCount;
-    calculateTextSize(text, &maxWidth, &lineCount);  // 텍스트의 최대 너비와 라인 수 계산
-
-    // 콘솔 중앙 위치 계산
-    int startX = (consoleWidth - maxWidth) / 2;
-    int startY = (consoleHeight - lineCount) / 2;
-
-    // 텍스트를 출력하기 위해 커서 위치를 이동시키며 출력
-    int currentX = startX;
-    int currentY = startY;
-
-    COORD pos;
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    for (int i = 0; text[i] != '\0'; i++) {
-        if (text[i] == '\n') {
-            currentY++;  // 줄바꿈이 발생하면 세로 위치를 한 줄 내림
-            currentX = startX;  // 가로 위치는 처음 중앙으로 초기화
-        } else {
-            pos.X = currentX;
-            pos.Y = currentY;
-            SetConsoleCursorPosition(hConsole, pos);  // 커서 이동
-            char slice[2];
-            strncpy(slice, &text[i], 1);  // 한 글자만 추출
-            slice[1] = '\0';
-            printf("%s", slice);  // 한 글자씩 출력
-            Sleep((int)(TEXT_SPEED * 1000));  // 텍스트 속도에 맞춰 딜레이 적용
-            currentX++;  // 다음 문자는 오른쪽으로 이동
-        }
-    }
-}
-
-// 콘솔의 마지막 줄에 메시지를 출력하는 함수
-void printExitMessage() {
-    int consoleWidth, consoleHeight;
-    getConsoleSize(&consoleWidth, &consoleHeight);  // 콘솔 크기를 가져옴
-
-    COORD pos;
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    
-    // 콘솔의 마지막 줄로 커서 이동
-    pos.X = 0;
-    pos.Y = consoleHeight - 1;
-    SetConsoleCursorPosition(hConsole, pos);  // 마지막 줄로 커서 이동
-}
-
 /*void animateText(char text[]) {
 	int len = strlen(text);
 	
