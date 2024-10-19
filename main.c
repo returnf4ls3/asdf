@@ -551,7 +551,7 @@ void intro() {
 	printf("■");
 	gotoxy(5, 12);
 	printf("■■■");
-	Sleep(2500);
+	Sleep(2000);
 	// 탈
 	BASEPOS_X = 20;
 	gotoxy(1, 1);
@@ -584,7 +584,7 @@ void intro() {
 	printf("■");
 	gotoxy(3, 11);
 	printf("■■■■■");
-	Sleep(2500);
+	Sleep(2000);
 	// 출 
 	BASEPOS_X = 40;
 	gotoxy(7, 1);
@@ -616,7 +616,7 @@ void intro() {
 	gotoxy(3, 14);
 	printf("■■■■■");
 	BASEPOS_X = 0;
-	Sleep(2500);
+	Sleep(2000);
 	system("cls");
 }
 
