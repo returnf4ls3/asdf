@@ -5,7 +5,7 @@
 #include <time.h>
 #include <conio.h>
 
-#define TEXT_SPEED 0.05 // edit it
+#define TEXT_SPEED 0.05// edit it
 #define INIT_POS 1
 #define MAP_SIZE 4
 
