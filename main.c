@@ -5,7 +5,7 @@
 #include <time.h>
 #include <conio.h>
 
-#define TEXT_SPEED 0.01 // edit it
+#define TEXT_SPEED 0.0001 // edit it
 #define INIT_POS 1
 #define MAP_SIZE 4
 
@@ -258,22 +258,34 @@ void animateText(char text[]) {
 }*/
 
 int userSelection(char sentence1[], char sentence2[]) {
-	int selected = 0;
+	int res = 0;
 	
-	printf("\n[선택]\n");
-	animateText(sentence1);
-	Sleep(1000);
-	animateText(sentence2);
-		
-	printf("선택: ");
-	scanf("%d", &selected);	
+	while (1) {
+		int selected = 0;
 	
-	if (selected == 1 || selected == 2) {
-		return selected;
-	} else {
-        printf("다시 입력해주세요.\n");
-        return 0;
-    }
+	    printf("\n[선택]\n");
+	    animateText(sentence1);
+	    Sleep(1000);
+	    animateText(sentence2);
+	    
+	    printf("선택: ");
+	    if (scanf("%d", &selected) != 1) {
+	        while (getchar() != '\n');
+	        printf("다시 입력해주세요.\n");
+	        continue;
+	    }
+	
+	    if (selected == 1 || selected == 2) {
+	        res = selected;
+	        break;
+	    } else {
+	        printf("다시 입력해주세요.\n");
+	    }
+	
+	    while (getchar() != '\n');	
+	}
+	
+	return res;
 } 
 
 /* 
@@ -616,6 +628,8 @@ int main() {
 			printf("\n");
 			animateText("이상한 진동과 소리를 꿈이라고 믿고 다시 눈을 감는다.");
 			break;
+		} else {
+			while (getchar() != '\n');
 		}
 	}
 	
@@ -741,6 +755,7 @@ int main() {
 				Sleep(1000);
 				animateText("쪽지엔 곰 고양이 금붕어 강아지 원숭이라고 쓰여있다.");
 			} else {
+				while (getchar() != '\n');
 				animateText("문이 밖에서 잠겼는지 철컹 소리와 함께 열리지 않는다.");
 				Sleep(1000);
 				getch();
@@ -816,16 +831,19 @@ int main() {
 										selected = 1;
 										break;
 									} else {
+										while (getchar() != '\n');
 										selected = 2;
 										break;
 									}
 								}
 							}
 						} else if (selected == 2) {
+							while (getchar() != '\n');
 							break;
 						}
 					}
 				} else if (sel_table == 0) {
+					while (getchar() != '\n');
 					break;
 				} else {
         			printf("다시 입력해주세요.\n");
@@ -871,6 +889,7 @@ int main() {
 									if (selected == 1) {
 										break;
 									} else {
+										while (getchar() != '\n');
 										Sleep(2500);
 										animateText("전화가 온다.\n\n4583-8194 라고 쓰여있다.");
 										Sleep(1000);
